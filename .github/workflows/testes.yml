@@ -1,0 +1,23 @@
+name: testes
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  testes:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.9", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Pillow (para o teste de capa)
+        run: pip install pillow
+      - name: Testes
+        run: python -m unittest discover -s tests -v
+      - name: Script compila sem Pillow
+        run: python -m py_compile skills/media/spotify-playlists/scripts/spotify.py
